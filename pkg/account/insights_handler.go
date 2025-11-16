@@ -1,15 +1,16 @@
 package account
 
 import (
+	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/client"
 	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk-account/v24.0/client/insights"
 )
 
 func GetInsightsByAccountID(params *insights.GetInsightsByAccountIDParams) (*insights.GetInsightsByAccountIDOK, error) {
-	ctx, client, err := ContextWithClient()
+	ctx, instagramClient, err := client.ContextWithClient()
 	if err != nil {
 		return nil, err
 	}
-	response, err := client.Insights.GetInsightsByAccountID(ctx, &insights.GetInsightsByAccountIDParams{
+	response, err := instagramClient.Account.Insights.GetInsightsByAccountID(ctx, &insights.GetInsightsByAccountIDParams{
 		InstagramAccountID: params.InstagramAccountID,
 		Breakdown:          params.Breakdown,
 		MetricType:         params.MetricType,

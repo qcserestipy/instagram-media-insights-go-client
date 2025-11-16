@@ -1,18 +1,19 @@
 package media
 
 import (
+	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/client"
 	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/client/insights"
 )
 
 func GetInsightsByMediaID(params *insights.GetInsightsByMediaIDParams) (*insights.GetInsightsByMediaIDOK, error) {
-	ctx, client, err := ContextWithClient()
+	ctx, instagramClient, err := client.ContextWithClient()
 	if err != nil {
 		return nil, err
 	}
-	response, err := client.Insights.GetInsightsByMediaID(ctx, &insights.GetInsightsByMediaIDParams{
+	response, err := instagramClient.Media.Insights.GetInsightsByMediaID(ctx, &insights.GetInsightsByMediaIDParams{
 		InstagramMediaID: params.InstagramMediaID,
-		Metric:           *&params.Metric,
-		Period:           *&params.Period,
+		Metric:           params.Metric,
+		Period:           params.Period,
 		Breakdown:        params.Breakdown,
 		MetricType:       params.MetricType,
 	})
