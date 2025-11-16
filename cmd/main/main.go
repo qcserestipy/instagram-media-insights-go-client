@@ -7,15 +7,13 @@ import (
 	"github.com/qcserestipy/instagram-api-go-client/pkg/account"
 	"github.com/qcserestipy/instagram-api-go-client/pkg/media"
 	accinsights "github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/insights"
-	mediaModel "github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/media"
-	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/insights"
+	accountMediaModel "github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/media"
+	insightModel "github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/insights"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
-
-	// Now you can use the client to make requests
-	params := insights.NewGetInsightsByMediaIDParams()
+	params := insightModel.NewGetInsightsByMediaIDParams()
 	params.InstagramMediaID = "18112405726596121"
 	params.Metric = "reach,likes,comments"
 	params.Period = "day"
@@ -82,7 +80,7 @@ func main() {
 		for _, story := range storiesResp.Payload.Data {
 			fmt.Printf("Story ID: %s\n", story.ID)
 			// Now you can use the client to make requests
-			params := insights.NewGetInsightsByMediaIDParams()
+			params := insightModel.NewGetInsightsByMediaIDParams()
 			params.InstagramMediaID = story.ID
 			params.Metric = "reach"
 			// params.Period = "day"
@@ -119,37 +117,38 @@ func main() {
 		}
 	}
 
-	mediaResp, err := account.GetMediaByUserID(&mediaModel.GetMediaByUserIDParams{
-		InstagramAccountID: "17841464714098258",
+	mediaResp, err := account.GetMediaByUserID(&accountMediaModel.GetMediaByUserIDParams{
+		InstagramAccountID: "17841475608626706",
 	})
 	if err != nil {
 		logrus.Fatalf("fatal error: %v", err)
 	}
-	fmt.Printf("Success! Media Response: %+v\n", mediaResp)
-	if mediaResp.Payload != nil && mediaResp.Payload.Data != nil {
-		for _, mediaItem := range mediaResp.Payload.Data {
-			fmt.Printf("Media ID: %s\n", mediaItem.ID)
-
-			params := insights.NewGetInsightsByMediaIDParams()
-			params.InstagramMediaID = mediaItem.ID
-			params.Metric = "views,likes,comments"
-			// params.Period = "day"
-			resp, err := media.GetInsightsByMediaID(params)
-			if err != nil {
-				logrus.Fatalf("fatal error: %v", err)
-			}
-
-			fmt.Printf("Success! Response: %+v\n", resp)
-			if resp.Payload != nil && resp.Payload.Data != nil {
-				for _, data := range resp.Payload.Data {
-					fmt.Printf("Metric: %s, Title: %s\n", data.Name, data.Title)
-					if data.Values != nil {
-						for _, val := range data.Values {
-							fmt.Printf("  Value: %d\n", val.Value)
-						}
+	for _, mediaItem := range mediaResp.Payload.Data {
+		fmt.Printf("Media ID: %s\n", mediaItem.ID)
+		resp, err := media.GetInsightsByMediaID(&insightModel.GetInsightsByMediaIDParams{
+			InstagramMediaID: mediaItem.ID,
+			Metric:           "reach,comments",
+		})
+		if err != nil {
+			logrus.Warnf("not supported: %v", err)
+			continue
+		}
+		if resp != nil && resp.Payload != nil && resp.Payload.Data != nil {
+			for _, data := range resp.Payload.Data {
+				fmt.Printf("Metric: %s, Title: %s\n", data.Name, data.Title)
+				if data.Values != nil {
+					for _, val := range data.Values {
+						fmt.Printf("  Value: %d\n", val.Value)
 					}
 				}
 			}
+		}
+
+		postResp, err := media.CreateCommentOnMedia(mediaItem.ID, "This is a remark from the Instagram API Go Client!")
+		if err != nil {
+			logrus.Warnf("failed to create comment on media %s: %v", mediaItem.ID, err)
+		} else {
+			fmt.Printf("Success! Comment created on media %s: %+v\n", mediaItem.ID, postResp)
 		}
 	}
 }
