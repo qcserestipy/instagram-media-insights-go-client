@@ -28,6 +28,10 @@ help: ## Display this help
 gen-api-client: ## generate goswagger client for harbor
 	@$(SWAGGER) generate client -f ${API_SPEC} --target=$(CLIENT_DIR) --template=stratoscale --additional-initialism=CVE --additional-initialism=GC --additional-initialism=OIDC
 
+.PHONY: build
+build:
+	go build -o bin/instagram-media-insights-go-client cmd/main/main.go
+
 .PHONY: cleanup
 cleanup:
 	rm --recursive --force pkg/sdk/v24.0/models pkg/sdk/v24.0/client

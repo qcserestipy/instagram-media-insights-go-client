@@ -1,10 +1,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/qcserestipy/insta-swagger/pkg/sdk/v24.0/client/insights"
+	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/api"
+	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/client/insights"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,9 +15,7 @@ func main() {
 	params.InstagramMediaID = "18112405726596121"
 	params.Metric = "reach,likes,comments"
 	params.Period = "day"
-
-	ctx := context.Background()
-	resp, err := apiClient.Insights.GetInsightsByMediaID(ctx, params)
+	resp, err := api.GetInsightsByMediaID(params)
 	if err != nil {
 		logrus.Fatalf("fatal error: %v", err)
 	}

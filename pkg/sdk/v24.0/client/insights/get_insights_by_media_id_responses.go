@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/qcserestipy/insta-swagger/pkg/sdk/v24.0/models"
+	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/models"
 )
 
 // GetInsightsByMediaIDReader is a Reader for the GetInsightsByMediaID structure.

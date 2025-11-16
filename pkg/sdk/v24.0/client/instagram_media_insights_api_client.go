@@ -13,7 +13,7 @@ import (
 	rtclient "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/qcserestipy/insta-swagger/pkg/sdk/v24.0/client/insights"
+	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/client/insights"
 )
 
 const (
