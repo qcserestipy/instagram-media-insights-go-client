@@ -13,6 +13,7 @@ import (
 	rtclient "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
+	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/comments"
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/insights"
 )
 
@@ -58,12 +59,14 @@ func New(c Config) *InstagramMediaInsightsAPI {
 
 	cli := new(InstagramMediaInsightsAPI)
 	cli.Transport = transport
+	cli.Comments = comments.New(transport, strfmt.Default, c.AuthInfo)
 	cli.Insights = insights.New(transport, strfmt.Default, c.AuthInfo)
 	return cli
 }
 
 // InstagramMediaInsightsAPI is a client for instagram media insights API
 type InstagramMediaInsightsAPI struct {
+	Comments  *comments.Client
 	Insights  *insights.Client
 	Transport runtime.ClientTransport
 }

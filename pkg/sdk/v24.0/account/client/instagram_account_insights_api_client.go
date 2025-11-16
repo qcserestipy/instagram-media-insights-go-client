@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/strfmt"
 
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/insights"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/media"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/stories"
 )
 
 const (
@@ -59,11 +61,15 @@ func New(c Config) *InstagramAccountInsightsAPI {
 	cli := new(InstagramAccountInsightsAPI)
 	cli.Transport = transport
 	cli.Insights = insights.New(transport, strfmt.Default, c.AuthInfo)
+	cli.Media = media.New(transport, strfmt.Default, c.AuthInfo)
+	cli.Stories = stories.New(transport, strfmt.Default, c.AuthInfo)
 	return cli
 }
 
 // InstagramAccountInsightsAPI is a client for instagram account insights API
 type InstagramAccountInsightsAPI struct {
 	Insights  *insights.Client
+	Media     *media.Client
+	Stories   *stories.Client
 	Transport runtime.ClientTransport
 }
