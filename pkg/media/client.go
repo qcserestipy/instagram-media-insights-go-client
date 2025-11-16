@@ -2,12 +2,9 @@ package media
 
 import (
 	"context"
-	"fmt"
-	"net/url"
-	"os"
 	"sync"
 
-	httptransport "github.com/go-openapi/runtime/client"
+	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/config"
 	apiclient "github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/client"
 )
 
@@ -19,22 +16,18 @@ var (
 
 func GetClient() (*apiclient.InstagramMediaInsightsAPI, error) {
 	ClientOnce.Do(func() {
-		// read access token from environment variable or configuration
-		accessToken := os.Getenv("ACCESS_TOKEN")
-		if accessToken == "" {
-			ClientErr = fmt.Errorf("ACCESS_TOKEN environment variable is not set")
+		apiURL, authInfo, err := config.CreateClientConfig()
+		if err != nil {
+			ClientErr = err
 			return
 		}
+
 		// Create the client configuration
 		cfg := apiclient.Config{
-			URL: &url.URL{
-				Scheme: "https",
-				Host:   "graph.facebook.com",
-				Path:   "/v24.0",
-			},
-			// Pass the access token as a query parameter
-			AuthInfo: httptransport.APIKeyAuth("access_token", "query", accessToken),
+			URL:      apiURL,
+			AuthInfo: authInfo,
 		}
+
 		// Create the client
 		ClientInstance = apiclient.New(cfg)
 	})
