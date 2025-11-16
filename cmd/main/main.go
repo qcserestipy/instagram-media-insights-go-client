@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/media"
-	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/client/insights"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/media"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/client/insights"
 
-	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/account"
-	accinsights "github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk-account/v24.0/client/insights"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/account"
+	accinsights "github.com/qcserestipy/instagram-api-go-client/pkg/sdk-account/v24.0/client/insights"
 	"github.com/sirupsen/logrus"
 )
 

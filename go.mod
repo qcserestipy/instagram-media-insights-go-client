@@ -1,4 +1,4 @@
-module github.com/qcserestipy/instagram-media-insights-go-client
+module github.com/qcserestipy/instagram-api-go-client
 
 go 1.25.0
 

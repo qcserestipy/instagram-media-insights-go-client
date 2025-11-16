@@ -1,8 +1,8 @@
 package media
 
 import (
-	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/client"
-	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/client/insights"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/client"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/client/insights"
 )
 
 func GetInsightsByMediaID(params *insights.GetInsightsByMediaIDParams) (*insights.GetInsightsByMediaIDOK, error) {
