@@ -15,6 +15,7 @@ import (
 
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/comments"
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/insights"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/media"
 )
 
 const (
@@ -61,6 +62,7 @@ func New(c Config) *InstagramMediaInsightsAPI {
 	cli.Transport = transport
 	cli.Comments = comments.New(transport, strfmt.Default, c.AuthInfo)
 	cli.Insights = insights.New(transport, strfmt.Default, c.AuthInfo)
+	cli.Media = media.New(transport, strfmt.Default, c.AuthInfo)
 	return cli
 }
 
@@ -68,5 +70,6 @@ func New(c Config) *InstagramMediaInsightsAPI {
 type InstagramMediaInsightsAPI struct {
 	Comments  *comments.Client
 	Insights  *insights.Client
+	Media     *media.Client
 	Transport runtime.ClientTransport
 }
