@@ -1,4 +1,4 @@
-package api
+package media
 
 import (
 	"github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/client/insights"

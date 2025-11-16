@@ -1,4 +1,4 @@
-package api
+package account
 
 import (
 	"context"
@@ -8,16 +8,16 @@ import (
 	"sync"
 
 	httptransport "github.com/go-openapi/runtime/client"
-	apiclient "github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk/v24.0/client"
+	apiclient "github.com/qcserestipy/instagram-media-insights-go-client/pkg/sdk-account/v24.0/client"
 )
 
 var (
-	ClientInstance *apiclient.InstagramMediaInsightsAPI
+	ClientInstance *apiclient.InstagramAccountInsightsAPI
 	ClientOnce     sync.Once
 	ClientErr      error
 )
 
-func GetClient() (*apiclient.InstagramMediaInsightsAPI, error) {
+func GetClient() (*apiclient.InstagramAccountInsightsAPI, error) {
 	ClientOnce.Do(func() {
 		// read access token from environment variable or configuration
 		accessToken := os.Getenv("ACCESS_TOKEN")
@@ -41,7 +41,7 @@ func GetClient() (*apiclient.InstagramMediaInsightsAPI, error) {
 	return ClientInstance, ClientErr
 }
 
-func ContextWithClient() (context.Context, *apiclient.InstagramMediaInsightsAPI, error) {
+func ContextWithClient() (context.Context, *apiclient.InstagramAccountInsightsAPI, error) {
 	client, err := GetClient()
 	if err != nil {
 		return nil, nil, err
