@@ -31,3 +31,15 @@ type Story struct {
 	TotalInteractions int     `json:"total_interactions"`
 	EngagementViews   float64 `json:"engagement_views"`
 }
+
+type Demographics struct {
+	AgeRanges map[string]int `json:"age_ranges"`
+	Genders   map[string]int `json:"genders"`
+	Countries map[string]int `json:"countries"`
+	Cities    map[string]int `json:"cities"`
+}
+
+type AccountDemographics struct {
+	Follower *Demographics `json:"follower"`
+	Engaged  *Demographics `json:"engaged"`
+}
