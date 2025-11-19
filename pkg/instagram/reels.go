@@ -53,11 +53,11 @@ func GetReels(accountID string, since *int64, until *int64) ([]Reel, error) {
 		}
 
 		// Fetch insights for view count using "views" metric
-		views := 0
-		reach := 0
-		shares := 0
-		saved := 0
-		totalInteractions := 0
+		views := int64(0)
+		reach := int64(0)
+		shares := int64(0)
+		saved := int64(0)
+		totalInteractions := int64(0)
 		mediaInsightsApiResponse, err := media.GetInsightsByMediaID(
 			&mediaInsightsModel.GetInsightsByMediaIDParams{
 				InstagramMediaID: reelID,
@@ -74,15 +74,15 @@ func GetReels(accountID string, since *int64, until *int64) ([]Reel, error) {
 				if len(data.Values) > 0 {
 					switch data.Name {
 					case "views":
-						views = int(data.Values[0].Value)
+						views = data.Values[0].Value
 					case "reach":
-						reach = int(data.Values[0].Value)
+						reach = data.Values[0].Value
 					case "shares":
-						shares = int(data.Values[0].Value)
+						shares = data.Values[0].Value
 					case "saved":
-						saved = int(data.Values[0].Value)
+						saved = data.Values[0].Value
 					case "total_interactions":
-						totalInteractions = int(data.Values[0].Value)
+						totalInteractions = data.Values[0].Value
 					}
 				}
 			}
@@ -99,8 +99,8 @@ func GetReels(accountID string, since *int64, until *int64) ([]Reel, error) {
 			Reach:             reach,
 			Shares:            shares,
 			Saves:             saved,
-			Likes:             int(mediaApiResponse.Payload.LikeCount),
-			Comments:          int(mediaApiResponse.Payload.CommentsCount),
+			Likes:             mediaApiResponse.Payload.LikeCount,
+			Comments:          mediaApiResponse.Payload.CommentsCount,
 			Caption:           mediaApiResponse.Payload.Caption,
 			DateTime:          mediaApiResponse.Payload.Timestamp,
 			TotalInteractions: totalInteractions,

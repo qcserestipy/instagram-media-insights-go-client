@@ -48,7 +48,7 @@ func GetStories(accountID string) ([]Story, error) {
 		}
 
 		// Fetch insights for view count using "views" metric
-		var follows, navigation, profile_activity, profile_visits, reach, replies, shares, total_interactions, views int
+		var follows, navigation, profile_activity, profile_visits, reach, replies, shares, total_interactions, views int64
 		mediaInsightsApiResponse, err := media.GetInsightsByMediaID(
 			&mediaInsightsModel.GetInsightsByMediaIDParams{
 				InstagramMediaID: storyID,
@@ -65,23 +65,23 @@ func GetStories(accountID string) ([]Story, error) {
 				if len(data.Values) > 0 {
 					switch data.Name {
 					case "follows":
-						views = int(data.Values[0].Value)
+						views = data.Values[0].Value
 					case "navigation":
-						navigation = int(data.Values[0].Value)
+						navigation = data.Values[0].Value
 					case "profile_activity":
-						profile_activity = int(data.Values[0].Value)
+						profile_activity = data.Values[0].Value
 					case "profile_visits":
-						profile_visits = int(data.Values[0].Value)
+						profile_visits = data.Values[0].Value
 					case "reach":
-						reach = int(data.Values[0].Value)
+						reach = data.Values[0].Value
 					case "replies":
-						replies = int(data.Values[0].Value)
+						replies = data.Values[0].Value
 					case "shares":
-						shares = int(data.Values[0].Value)
+						shares = data.Values[0].Value
 					case "total_interactions":
-						total_interactions = int(data.Values[0].Value)
+						total_interactions = data.Values[0].Value
 					case "views":
-						views = int(data.Values[0].Value)
+						views = data.Values[0].Value
 
 					}
 				}

@@ -16,6 +16,7 @@ import (
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/insights"
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/media"
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/stories"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/user"
 )
 
 const (
@@ -63,6 +64,7 @@ func New(c Config) *InstagramAccountInsightsAPI {
 	cli.Insights = insights.New(transport, strfmt.Default, c.AuthInfo)
 	cli.Media = media.New(transport, strfmt.Default, c.AuthInfo)
 	cli.Stories = stories.New(transport, strfmt.Default, c.AuthInfo)
+	cli.User = user.New(transport, strfmt.Default, c.AuthInfo)
 	return cli
 }
 
@@ -71,5 +73,6 @@ type InstagramAccountInsightsAPI struct {
 	Insights  insights.API
 	Media     media.API
 	Stories   stories.API
+	User      user.API
 	Transport runtime.ClientTransport
 }

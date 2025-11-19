@@ -34,10 +34,10 @@ func GetDemographics(accountID string, kind string) (*Demographics, error) {
 		responseBreakdowns = append(responseBreakdowns, insightsResponse.Payload.Data[0].TotalValue.Breakdowns[0])
 	}
 	demographics := &Demographics{
-		AgeRanges: make(map[string]int),
-		Genders:   make(map[string]int),
-		Countries: make(map[string]int),
-		Cities:    make(map[string]int),
+		AgeRanges: make(map[string]int64),
+		Genders:   make(map[string]int64),
+		Countries: make(map[string]int64),
+		Cities:    make(map[string]int64),
 	}
 
 	for _, breakdown := range responseBreakdowns {
@@ -50,28 +50,28 @@ func GetDemographics(accountID string, kind string) (*Demographics, error) {
 			for _, result := range breakdown.Results {
 				if len(result.DimensionValues) > 0 {
 					ageRange := result.DimensionValues[0]
-					demographics.AgeRanges[ageRange] = int(result.Value)
+					demographics.AgeRanges[ageRange] = result.Value
 				}
 			}
 		case "gender":
 			for _, result := range breakdown.Results {
 				if len(result.DimensionValues) > 0 {
 					gender := result.DimensionValues[0]
-					demographics.Genders[gender] = int(result.Value)
+					demographics.Genders[gender] = result.Value
 				}
 			}
 		case "country":
 			for _, result := range breakdown.Results {
 				if len(result.DimensionValues) > 0 {
 					country := result.DimensionValues[0]
-					demographics.Countries[country] = int(result.Value)
+					demographics.Countries[country] = result.Value
 				}
 			}
 		case "city":
 			for _, result := range breakdown.Results {
 				if len(result.DimensionValues) > 0 {
 					city := result.DimensionValues[0]
-					demographics.Cities[city] = int(result.Value)
+					demographics.Cities[city] = result.Value
 				}
 			}
 		}

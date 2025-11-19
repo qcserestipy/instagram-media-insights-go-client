@@ -7,12 +7,24 @@ import (
 
 func main() {
 
+	dyn, err := instagram.GetFollowerDynamics("17841464714098258", "last_21_days")
+	if err != nil {
+		logrus.Fatalf("fatal error: %v", err)
+	}
+	logrus.Infof("Follower Dynamics: %+v", dyn)
+
 	demographics, err := instagram.GetAccountDemographics("17841464714098258")
 	if err != nil {
 		logrus.Fatalf("fatal error: %v", err)
 	}
 	logrus.Infof("Follower Demographics: %+v", demographics.Follower.Countries["DE"])
 	logrus.Infof("Engaged Audience Demographics: %+v", demographics.Engaged.Countries["DE"])
+
+	info, err := instagram.GetAccountInfo("17841464714098258")
+	if err != nil {
+		logrus.Fatalf("fatal error: %v", err)
+	}
+	logrus.Infof("Info: %s, Followers: %d, Following: %d, Media: %d", info.Username, info.FollowersCount, info.FollowingCount, info.MediaCount)
 
 	// err := utils.RefreshAccessToken("627978530406248")
 	// if err != nil {
