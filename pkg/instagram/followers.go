@@ -102,11 +102,19 @@ func GetFollowerDynamics(accountID string, rangeStr string) (*FollowerDynamics, 
 		}
 	}
 	net := followsTotal - unfollowsTotal
+	parsedSince, err := utils.ParseTimestamp(time.Unix(since, 0).Format(time.RFC3339))
+	if err != nil {
+		return nil, fmt.Errorf("could not parse since timestamp: %v", err)
+	}
+	parsedUntil, err := utils.ParseTimestamp(time.Unix(until, 0).Format(time.RFC3339))
+	if err != nil {
+		return nil, fmt.Errorf("could not parse until timestamp: %v", err)
+	}
 	return &FollowerDynamics{
 		NewFollowers: followsTotal,
 		Unfollowers:  unfollowsTotal,
 		NetFollowers: net,
-		Since:        time.Unix(since, 0),
-		Until:        time.Unix(until, 0),
+		Since:        parsedSince,
+		Until:        parsedUntil,
 	}, nil
 }

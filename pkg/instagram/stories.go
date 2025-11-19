@@ -7,6 +7,7 @@ import (
 	"github.com/qcserestipy/instagram-api-go-client/pkg/media"
 	mediaInsightsModel "github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/insights"
 	mediaApiModel "github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/media"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/utils"
 	"github.com/sirupsen/logrus"
 )
 
@@ -93,6 +94,10 @@ func GetStories(accountID string) ([]Story, error) {
 			engagementViews = float64(total_interactions) / float64(views) * 100
 		}
 
+		parsedTime, err := utils.ParseTimestamp(mediaApiResponse.Payload.Timestamp)
+		if err != nil {
+			logrus.Warnf("Could not parse timestamp %s: %v", mediaApiResponse.Payload.Timestamp, err)
+		}
 		stories = append(stories, Story{
 			ID:                mediaApiResponse.Payload.ID,
 			Views:             views,
@@ -104,7 +109,7 @@ func GetStories(accountID string) ([]Story, error) {
 			ProfileVisits:     profile_visits,
 			Follows:           follows,
 			TotalInteractions: total_interactions,
-			DateTime:          mediaApiResponse.Payload.Timestamp,
+			DateTime:          parsedTime,
 			EngagementViews:   math.Round(engagementViews*100) / 100,
 		})
 	}

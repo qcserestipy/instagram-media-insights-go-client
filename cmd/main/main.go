@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/qcserestipy/instagram-api-go-client/pkg/instagram"
 	"github.com/sirupsen/logrus"
 )
@@ -30,14 +32,15 @@ func main() {
 	// if err != nil {
 	// 	logrus.Fatalf("fatal error: %v", utils.ParseAPIError(err, "refresh access token"))
 	// }
-	// reels, err := instagram.GetReels("17841464714098258", nil, nil)
-	// if err != nil {
-	// 	logrus.Fatalf("fatal error: %v", err)
-	// }
-	// for _, reel := range reels {
-	// 	fmt.Printf("Reel ID: %s, Views: %d, Reach: %d, Likes: %d, Comments: %d, Shares: %d, Saves: %d, Engagement Views: %.2f%%\n",
-	// 		reel.ID, reel.Views, reel.Reach, reel.Likes, reel.Comments, reel.Shares, reel.Saves, reel.EngagementViews)
-	// }
+
+	reels, err := instagram.GetReels("17841464714098258", nil, nil)
+	if err != nil {
+		logrus.Fatalf("fatal error: %v", err)
+	}
+	for _, reel := range reels {
+		fmt.Printf("Reel ID: %s, Time: %s, Views: %d, Reach: %d, Likes: %d, Comments: %d, Shares: %d, Saves: %d, Engagement Views: %.2f%%\n",
+			reel.ID, reel.DateTime, reel.Views, reel.Reach, reel.Likes, reel.Comments, reel.Shares, reel.Saves, reel.EngagementViews)
+	}
 
 	// stories, err := instagram.GetStories("17841464714098258")
 	// if err != nil {

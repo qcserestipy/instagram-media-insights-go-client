@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"reflect"
+	"time"
 
 	access_token_handler "github.com/qcserestipy/instagram-api-go-client/pkg/access"
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/page/client/access_token"
@@ -66,6 +67,27 @@ func ParseAPIError(err error, context string) error {
 		codeField.Int(),
 		typeField.String(),
 		messageField.String())
+}
+
+// ParseTimestamp tries multiple common layouts and returns the parsed time or an error.
+// Accepts timestamps like RFC3339 (with colon offsets) and offsets without colon (+0000).
+// Parsed times are converted to the local timezone to match `time.Unix` formatting.
+func ParseTimestamp(ts string) (time.Time, error) {
+	layouts := []string{
+		time.RFC3339,
+		"2006-01-02T15:04:05-0700",
+		"2006-01-02T15:04:05Z0700",
+		"2006-01-02T15:04:05",
+	}
+	var lastErr error
+	for _, l := range layouts {
+		if t, err := time.Parse(l, ts); err == nil {
+			return t.UTC(), nil
+		} else {
+			lastErr = err
+		}
+	}
+	return time.Time{}, fmt.Errorf("could not parse timestamp %s: %v", ts, lastErr)
 }
 
 func RefreshAccessToken(pageID string) error {
