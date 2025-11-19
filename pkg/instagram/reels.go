@@ -1,6 +1,7 @@
 package instagram
 
 import (
+	"context"
 	"math"
 
 	"github.com/qcserestipy/instagram-api-go-client/pkg/account"
@@ -15,11 +16,11 @@ import (
 // GetReels fetches all reels (VIDEO media) for a given Instagram account
 // and returns them with their metrics (views, likes, comments, caption).
 // since and until are optional Unix timestamp filters - pass nil to omit them.
-func GetReels(accountID string, since *int64, until *int64) ([]Reel, error) {
+func GetReels(ctx context.Context, accountsvc *account.Service, mediasvc *media.Service, accountID string, since *int64, until *int64) ([]Reel, error) {
 	var reels []Reel
 
 	// Get all media for the account
-	accountMediaResponse, err := account.GetMediaByUserID(&accountMediaApiModel.GetMediaByUserIDParams{
+	accountMediaResponse, err := accountsvc.GetMediaByUserID(ctx, &accountMediaApiModel.GetMediaByUserIDParams{
 		InstagramAccountID: accountID,
 		Since:              since,
 		Until:              until,
@@ -37,7 +38,8 @@ func GetReels(accountID string, since *int64, until *int64) ([]Reel, error) {
 	// Fetch details for each media item
 	for _, reelID := range reelIDs {
 		fields := "media_product_type,like_count,comments_count,caption,timestamp"
-		mediaApiResponse, err := media.GetMediaByID(
+		mediaApiResponse, err := mediasvc.GetMediaByID(
+			ctx,
 			&mediaApiModel.GetMediaByIDParams{
 				InstagramMediaID: reelID,
 				Fields:           &fields,
@@ -59,7 +61,8 @@ func GetReels(accountID string, since *int64, until *int64) ([]Reel, error) {
 		shares := int64(0)
 		saved := int64(0)
 		totalInteractions := int64(0)
-		mediaInsightsApiResponse, err := media.GetInsightsByMediaID(
+		mediaInsightsApiResponse, err := mediasvc.GetInsightsByMediaID(
+			ctx,
 			&mediaInsightsModel.GetInsightsByMediaIDParams{
 				InstagramMediaID: reelID,
 				Metric:           "views,reach,shares,saved,total_interactions",

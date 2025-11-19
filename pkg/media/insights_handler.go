@@ -1,16 +1,13 @@
 package media
 
 import (
-	"github.com/qcserestipy/instagram-api-go-client/pkg/client"
+	"context"
+
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/insights"
 )
 
-func GetInsightsByMediaID(params *insights.GetInsightsByMediaIDParams) (*insights.GetInsightsByMediaIDOK, error) {
-	ctx, instagramClient, err := client.ContextWithClient()
-	if err != nil {
-		return nil, err
-	}
-	response, err := instagramClient.Media.Insights.GetInsightsByMediaID(ctx, &insights.GetInsightsByMediaIDParams{
+func (s *Service) GetInsightsByMediaID(ctx context.Context, params *insights.GetInsightsByMediaIDParams) (*insights.GetInsightsByMediaIDOK, error) {
+	response, err := s.client.Media.Insights.GetInsightsByMediaID(ctx, &insights.GetInsightsByMediaIDParams{
 		InstagramMediaID: params.InstagramMediaID,
 		Metric:           params.Metric,
 		Period:           params.Period,

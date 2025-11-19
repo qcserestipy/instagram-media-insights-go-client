@@ -1,16 +1,13 @@
 package media
 
 import (
-	"github.com/qcserestipy/instagram-api-go-client/pkg/client"
+	"context"
+
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/comments"
 )
 
-func GetCommentsByMediaID(mediaId string) (*comments.GetCommentsByMediaIDOK, error) {
-	ctx, instagramClient, err := client.ContextWithClient()
-	if err != nil {
-		return nil, err
-	}
-	response, err := instagramClient.Media.Comments.GetCommentsByMediaID(ctx, &comments.GetCommentsByMediaIDParams{
+func (s *Service) GetCommentsByMediaID(mediaId string, ctx context.Context) (*comments.GetCommentsByMediaIDOK, error) {
+	response, err := s.client.Media.Comments.GetCommentsByMediaID(ctx, &comments.GetCommentsByMediaIDParams{
 		InstagramMediaID: mediaId,
 	})
 	if err != nil {
@@ -19,12 +16,8 @@ func GetCommentsByMediaID(mediaId string) (*comments.GetCommentsByMediaIDOK, err
 	return response, nil
 }
 
-func CreateCommentOnMedia(mediaId string, message string) (*comments.CreateCommentOnMediaOK, error) {
-	ctx, instagramClient, err := client.ContextWithClient()
-	if err != nil {
-		return nil, err
-	}
-	response, err := instagramClient.Media.Comments.CreateCommentOnMedia(ctx, &comments.CreateCommentOnMediaParams{
+func (s *Service) CreateCommentOnMedia(mediaId string, message string, ctx context.Context) (*comments.CreateCommentOnMediaOK, error) {
+	response, err := s.client.Media.Comments.CreateCommentOnMedia(ctx, &comments.CreateCommentOnMediaParams{
 		InstagramMediaID: mediaId,
 		Message:          message,
 	})

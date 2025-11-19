@@ -1,28 +1,43 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"log"
 
+	"github.com/qcserestipy/instagram-api-go-client/pkg/account"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/client"
 	"github.com/qcserestipy/instagram-api-go-client/pkg/instagram"
+	"github.com/qcserestipy/instagram-api-go-client/pkg/media"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
 
-	dyn, err := instagram.GetFollowerDynamics("17841464714098258", "last_21_days")
+	igClient, err := client.NewDefault()
+	if err != nil {
+		log.Fatalf("failed to create instagram client: %v", err)
+	}
+
+	accountSvc := account.NewService(igClient)
+	mediaSvc := media.NewService(igClient)
+
+	ctx := context.Background()
+
+	dyn, err := instagram.GetFollowerDynamics(ctx, accountSvc, "17841464714098258", "last_21_days")
 	if err != nil {
 		logrus.Fatalf("fatal error: %v", err)
 	}
 	logrus.Infof("Follower Dynamics: %+v", dyn)
 
-	demographics, err := instagram.GetAccountDemographics("17841464714098258")
+	demographics, err := instagram.GetAccountDemographics(ctx, accountSvc, "17841464714098258")
 	if err != nil {
 		logrus.Fatalf("fatal error: %v", err)
 	}
 	logrus.Infof("Follower Demographics: %+v", demographics.Follower.Countries["DE"])
 	logrus.Infof("Engaged Audience Demographics: %+v", demographics.Engaged.Countries["DE"])
 
-	info, err := instagram.GetAccountInfo("17841464714098258")
+	info, err := instagram.GetAccountInfo(ctx, accountSvc, "17841464714098258")
 	if err != nil {
 		logrus.Fatalf("fatal error: %v", err)
 	}
@@ -33,7 +48,7 @@ func main() {
 	// 	logrus.Fatalf("fatal error: %v", utils.ParseAPIError(err, "refresh access token"))
 	// }
 
-	reels, err := instagram.GetReels("17841464714098258", nil, nil)
+	reels, err := instagram.GetReels(ctx, accountSvc, mediaSvc, "17841464714098258", nil, nil)
 	if err != nil {
 		logrus.Fatalf("fatal error: %v", err)
 	}

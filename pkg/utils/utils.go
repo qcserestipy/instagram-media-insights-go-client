@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"time"
@@ -90,12 +91,12 @@ func ParseTimestamp(ts string) (time.Time, error) {
 	return time.Time{}, fmt.Errorf("could not parse timestamp %s: %v", ts, lastErr)
 }
 
-func RefreshAccessToken(pageID string) error {
+func RefreshAccessToken(ctx context.Context, svc *access_token_handler.Service, pageID string) error {
 	if pageID == "" {
 		return fmt.Errorf("page ID cannot be empty")
 	}
 
-	response, err := access_token_handler.GetPageAccessToken(&access_token.GetPageAccessTokenParams{
+	response, err := svc.GetPageAccessToken(ctx, &access_token.GetPageAccessTokenParams{
 		PageID: pageID,
 		Fields: "access_token",
 	})

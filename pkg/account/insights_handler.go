@@ -1,16 +1,16 @@
 package account
 
 import (
-	"github.com/qcserestipy/instagram-api-go-client/pkg/client"
+	"context"
+
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/account/client/insights"
 )
 
-func GetInsightsByAccountID(params *insights.GetInsightsByAccountIDParams) (*insights.GetInsightsByAccountIDOK, error) {
-	ctx, instagramClient, err := client.ContextWithClient()
-	if err != nil {
-		return nil, err
-	}
-	response, err := instagramClient.Account.Insights.GetInsightsByAccountID(ctx, &insights.GetInsightsByAccountIDParams{
+func (s *Service) GetInsightsByAccountID(
+	ctx context.Context,
+	params *insights.GetInsightsByAccountIDParams,
+) (*insights.GetInsightsByAccountIDOK, error) {
+	response, err := s.client.Account.Insights.GetInsightsByAccountID(ctx, &insights.GetInsightsByAccountIDParams{
 		InstagramAccountID: params.InstagramAccountID,
 		Breakdown:          params.Breakdown,
 		MetricType:         params.MetricType,

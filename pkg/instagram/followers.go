@@ -1,6 +1,7 @@
 package instagram
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -10,9 +11,9 @@ import (
 	"github.com/qcserestipy/instagram-api-go-client/pkg/utils"
 )
 
-func GetFollowers(accountID string) (int64, error) {
+func GetFollowers(ctx context.Context, svc *account.Service, accountID string) (int64, error) {
 	fields := "followers_count"
-	insightsResponse, err := account.GetUserByID(&user.GetInstagramUserByIDParams{
+	insightsResponse, err := svc.GetUserByID(ctx, &user.GetInstagramUserByIDParams{
 		InstagramAccountID: accountID,
 		Fields:             &fields,
 	})
@@ -25,7 +26,7 @@ func GetFollowers(accountID string) (int64, error) {
 // GetFollowerDynamics returns the net follower change (follows - unfollows)
 // for the provided account over the given time range string.
 // Supported ranges: last_30_days, last_21_days, last_14_days,last_7_days, yesterday, today
-func GetFollowerDynamics(accountID string, rangeStr string) (*FollowerDynamics, error) {
+func GetFollowerDynamics(ctx context.Context, svc *account.Service, accountID string, rangeStr string) (*FollowerDynamics, error) {
 	metrics := "follows_and_unfollows"
 	breakdown := "follow_type"
 	metricType := "total_value"
@@ -59,7 +60,7 @@ func GetFollowerDynamics(accountID string, rangeStr string) (*FollowerDynamics, 
 		return nil, fmt.Errorf("unsupported range: %s", rangeStr)
 	}
 
-	insightsResponse, err := account.GetInsightsByAccountID(&insights.GetInsightsByAccountIDParams{
+	insightsResponse, err := svc.GetInsightsByAccountID(ctx, &insights.GetInsightsByAccountIDParams{
 		InstagramAccountID: accountID,
 		Metric:             metrics,
 		Period:             "day",

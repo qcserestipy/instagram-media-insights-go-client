@@ -1,6 +1,7 @@
 package instagram
 
 import (
+	"context"
 	"math"
 
 	"github.com/qcserestipy/instagram-api-go-client/pkg/account"
@@ -14,11 +15,11 @@ import (
 // GetReels fetches all reels (VIDEO media) for a given Instagram account
 // and returns them with their metrics (views, likes, comments, caption).
 // since and until are optional Unix timestamp filters - pass nil to omit them.
-func GetStories(accountID string) ([]Story, error) {
+func GetStories(ctx context.Context, accountsvc *account.Service, mediasvc *media.Service, accountID string) ([]Story, error) {
 	var stories []Story
 
 	// Get all media for the account
-	accountMediaResponse, err := account.GetStoriesByUserID(accountID)
+	accountMediaResponse, err := accountsvc.GetStoriesByUserID(ctx, accountID)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +33,8 @@ func GetStories(accountID string) ([]Story, error) {
 	// Fetch details for each media item
 	for _, storyID := range storyIDs {
 		fields := "media_product_type,timestamp"
-		mediaApiResponse, err := media.GetMediaByID(
+		mediaApiResponse, err := mediasvc.GetMediaByID(
+			ctx,
 			&mediaApiModel.GetMediaByIDParams{
 				InstagramMediaID: storyID,
 				Fields:           &fields,
@@ -50,7 +52,8 @@ func GetStories(accountID string) ([]Story, error) {
 
 		// Fetch insights for view count using "views" metric
 		var follows, navigation, profile_activity, profile_visits, reach, replies, shares, total_interactions, views int64
-		mediaInsightsApiResponse, err := media.GetInsightsByMediaID(
+		mediaInsightsApiResponse, err := mediasvc.GetInsightsByMediaID(
+			ctx,
 			&mediaInsightsModel.GetInsightsByMediaIDParams{
 				InstagramMediaID: storyID,
 				Metric:           "follows,navigation,profile_activity,profile_visits,reach,replies,shares,total_interactions,views",

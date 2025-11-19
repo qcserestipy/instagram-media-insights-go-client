@@ -1,16 +1,13 @@
 package media
 
 import (
-	"github.com/qcserestipy/instagram-api-go-client/pkg/client"
+	"context"
+
 	"github.com/qcserestipy/instagram-api-go-client/pkg/sdk/v24.0/media/client/media"
 )
 
-func GetMediaByID(params *media.GetMediaByIDParams) (*media.GetMediaByIDOK, error) {
-	ctx, instagramClient, err := client.ContextWithClient()
-	if err != nil {
-		return nil, err
-	}
-	response, err := instagramClient.Media.Media.GetMediaByID(
+func (s *Service) GetMediaByID(ctx context.Context, params *media.GetMediaByIDParams) (*media.GetMediaByIDOK, error) {
+	response, err := s.client.Media.Media.GetMediaByID(
 		ctx,
 		params,
 	)

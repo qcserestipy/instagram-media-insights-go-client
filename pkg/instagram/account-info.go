@@ -1,6 +1,7 @@
 package instagram
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/qcserestipy/instagram-api-go-client/pkg/account"
@@ -8,9 +9,9 @@ import (
 	"github.com/qcserestipy/instagram-api-go-client/pkg/utils"
 )
 
-func GetAccountInfo(accountID string) (*AccountInfo, error) {
+func GetAccountInfo(ctx context.Context, svc *account.Service, accountID string) (*AccountInfo, error) {
 	fields := "id,username,followers_count,follows_count,media_count,profile_picture_url,biography,website"
-	insightsResponse, err := account.GetUserByID(&user.GetInstagramUserByIDParams{
+	insightsResponse, err := svc.GetUserByID(ctx, &user.GetInstagramUserByIDParams{
 		InstagramAccountID: accountID,
 		Fields:             &fields,
 	})

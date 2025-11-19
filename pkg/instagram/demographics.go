@@ -1,6 +1,7 @@
 package instagram
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/qcserestipy/instagram-api-go-client/pkg/account"
@@ -9,7 +10,7 @@ import (
 	"github.com/qcserestipy/instagram-api-go-client/pkg/utils"
 )
 
-func GetDemographics(accountID string, kind string) (*Demographics, error) {
+func GetDemographics(ctx context.Context, svc *account.Service, accountID string, kind string) (*Demographics, error) {
 
 	if kind != "follower_demographics" && kind != "engaged_audience_demographics" {
 		return nil, fmt.Errorf("invalid kind: %s", kind)
@@ -20,7 +21,7 @@ func GetDemographics(accountID string, kind string) (*Demographics, error) {
 	metric_type := "total_value"
 	timeframe := "this_month"
 	for _, breakdown := range breakdowns {
-		insightsResponse, err := account.GetInsightsByAccountID(&insights.GetInsightsByAccountIDParams{
+		insightsResponse, err := svc.GetInsightsByAccountID(ctx, &insights.GetInsightsByAccountIDParams{
 			InstagramAccountID: accountID,
 			Metric:             kind,
 			Period:             "lifetime",
@@ -80,12 +81,12 @@ func GetDemographics(accountID string, kind string) (*Demographics, error) {
 	return demographics, nil
 }
 
-func GetAccountDemographics(accountID string) (*AccountDemographics, error) {
-	follower, err := GetDemographics(accountID, "follower_demographics")
+func GetAccountDemographics(ctx context.Context, svc *account.Service, accountID string) (*AccountDemographics, error) {
+	follower, err := GetDemographics(ctx, svc, accountID, "follower_demographics")
 	if err != nil {
 		return nil, err
 	}
-	engaged, err := GetDemographics(accountID, "engaged_audience_demographics")
+	engaged, err := GetDemographics(ctx, svc, accountID, "engaged_audience_demographics")
 	if err != nil {
 		return nil, err
 	}
