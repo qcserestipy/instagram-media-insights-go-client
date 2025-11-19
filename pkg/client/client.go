@@ -22,7 +22,7 @@ type AuthInfoType = any
 
 // NewFromConfig creates a new InstagramClient from a given apiURL + authInfo.
 // This is convenient if another project wants to fully control configuration.
-func NewFromConfig(apiURL *url.URL, authInfo runtime.ClientAuthInfoWriter) *InstagramClient {
+func NewFromConfig(apiURL *url.URL, authInfo runtime.ClientAuthInfoWriter) (*InstagramClient, error) {
 	mediaCfg := mediaclient.Config{
 		URL:      apiURL,
 		AuthInfo: authInfo,
@@ -40,7 +40,7 @@ func NewFromConfig(apiURL *url.URL, authInfo runtime.ClientAuthInfoWriter) *Inst
 		Media:   mediaclient.New(mediaCfg),
 		Account: accountclient.New(accountCfg),
 		Page:    pageclient.New(pageCfg),
-	}
+	}, nil
 }
 
 // NewDefault creates a new InstagramClient using your existing config.CreateClientConfig().
@@ -49,5 +49,9 @@ func NewDefault() (*InstagramClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewFromConfig(apiURL, authInfo), nil
+	client, err := NewFromConfig(apiURL, authInfo)
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
 }
